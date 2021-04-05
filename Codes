@@ -1,0 +1,63 @@
+#include <Adafruit_CircuitPlayground.h>
+#include <Servo.h>
+Servo myservo;
+float value;
+int pos = 0;
+
+
+void setup() {
+  Serial.begin(9600);
+  CircuitPlayground.begin();
+  myservo.attach(A3);
+}
+
+void loop() {
+  value = CircuitPlayground.mic.soundPressureLevel(10);
+  
+  Serial.print("Sound Sensor SPL: ");
+  Serial.println(value);
+
+  if (value>85){
+    CircuitPlayground.playTone(500, 100);
+    CircuitPlayground.playTone(600, 100);
+    CircuitPlayground.playTone(800, 100);
+  
+    CircuitPlayground.setPixelColor(0,255, 0, 68);
+    CircuitPlayground.setPixelColor(1,247, 0, 255);
+    CircuitPlayground.setPixelColor(2,247, 0, 255);
+    CircuitPlayground.setPixelColor(3,0, 30, 255);
+    CircuitPlayground.setPixelColor(4,0, 30, 255);
+   
+    CircuitPlayground.setPixelColor(5, 247, 0, 255);
+    CircuitPlayground.setPixelColor(6, 0, 255, 208);
+    CircuitPlayground.setPixelColor(7, 0, 255, 208);
+    CircuitPlayground.setPixelColor(8, 0, 255, 26);
+    CircuitPlayground.setPixelColor(9, 255, 0, 68);
+
+    delay(1000);
+    
+  } else {
+    CircuitPlayground.setPixelColor(0,255,255,255);
+    CircuitPlayground.setPixelColor(1,255,255,255);
+    CircuitPlayground.setPixelColor(2,255,255,255);
+    CircuitPlayground.setPixelColor(3,255,255,255);
+    CircuitPlayground.setPixelColor(4,255,255,255);
+    
+    CircuitPlayground.setPixelColor(5, 255,255,255);
+    CircuitPlayground.setPixelColor(6, 255,255,255);
+    CircuitPlayground.setPixelColor(7, 255,255,255);
+    CircuitPlayground.setPixelColor(8, 255,255,255);
+    CircuitPlayground.setPixelColor(9, 255,255,255);
+    for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+      // in steps of 1 degree
+      myservo.write(pos);              // tell servo to go to position in variable 'pos'
+      //delay(5);                       // waits 15ms for the servo to reach the position
+    }
+    for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+      myservo.write(pos);              // tell servo to go to position in variable 'pos'
+      //delay(5);                       // waits 15ms for the servo to reach the position
+    }
+     
+
+  }
+}
